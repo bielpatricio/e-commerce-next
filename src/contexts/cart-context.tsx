@@ -1,4 +1,5 @@
-'use-client'
+'use client'
+
 import {
   ReactNode,
   createContext,
@@ -38,19 +39,27 @@ interface ShoppingCartProviderProps {
 export function ShoppingCartContextProvider({
   children,
 }: ShoppingCartProviderProps) {
+  function getStoredCartItems() {
+    if (typeof window !== 'undefined') {
+      const storedStateAsJSON = localStorage.getItem('@shirt:cart-State-1.0.0')
+
+      if (storedStateAsJSON) {
+        try {
+          return JSON.parse(storedStateAsJSON)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+    return { items: [] }
+  }
+
   const [cartState, dispatch] = useReducer(
     cartReducer,
     {
       items: [],
     },
-    () => {
-      const storedStateAsJSON = localStorage.getItem('@shirt:cart-State-1.0.0')
-
-      if (storedStateAsJSON) {
-        return JSON.parse(storedStateAsJSON)
-      }
-      return { items: [] }
-    },
+    () => getStoredCartItems(),
   )
 
   const { items } = cartState
