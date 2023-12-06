@@ -6,4 +6,5 @@ export interface Product {
   image: string
   description: string
   featured: boolean
+  amount: number
 }
