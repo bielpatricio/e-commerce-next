@@ -1,6 +1,7 @@
 import { Header } from '@/components/header'
 import { ShoppingCartContextProvider } from '@/contexts/cart-context'
 import { ReactNode } from 'react'
+import * as Toast from '@radix-ui/react-toast'
 
 export default function StoreLayout({ children }: { children: ReactNode }) {
   return (
