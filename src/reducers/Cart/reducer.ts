@@ -21,14 +21,22 @@ export function cartReducer(state: CartState, action: any) {
     case ActionTypes.REMOVE_ITEM:
       return {
         ...state,
-        items: state.items.filter((coff) => coff.id !== action.payload.id),
+        items: state.items.filter(
+          (item) =>
+            !(
+              item.id === action.payload.id && item.size === action.payload.size
+            ),
+        ),
       }
 
     case ActionTypes.SUB_ITEM:
       return {
         ...state,
         items: state.items.map((item) => {
-          if (item.id === action.payload.id) {
+          if (
+            item.id === action.payload.id &&
+            item.size === action.payload.size
+          ) {
             return {
               ...item,
               amount: item.amount - 1,
@@ -37,11 +45,15 @@ export function cartReducer(state: CartState, action: any) {
           return item
         }),
       }
+
     case ActionTypes.ADD_ITEM:
       return {
         ...state,
         items: state.items.map((item) => {
-          if (item.id === action.payload.id) {
+          if (
+            item.id === action.payload.id &&
+            item.size === action.payload.size
+          ) {
             return {
               ...item,
               amount: item.amount + 1,
@@ -50,11 +62,15 @@ export function cartReducer(state: CartState, action: any) {
           return item
         }),
       }
+
     case ActionTypes.SUM_ITEM:
       return {
         ...state,
         items: state.items.map((item) => {
-          if (item.id === action.payload.id) {
+          if (
+            item.id === action.payload.id &&
+            item.size === action.payload.size
+          ) {
             return {
               ...item,
               amount: item.amount + action.payload.quantity,
@@ -63,6 +79,7 @@ export function cartReducer(state: CartState, action: any) {
           return item
         }),
       }
+
     default: {
       return state
     }

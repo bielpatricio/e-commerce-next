@@ -1,4 +1,8 @@
-export interface Product {
+export interface SizeProduct {
+  size: 'P' | 'M' | 'G' | 'GG'
+}
+
+export interface Product extends SizeProduct {
   id: number
   title: string
   slug: string

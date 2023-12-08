@@ -14,19 +14,21 @@ export function resetAllAction() {
     type: ActionTypes.RESET_ALL,
   }
 }
-export function addItemAction(id: string) {
+export function addItemAction(id: number, size: string) {
   return {
     type: ActionTypes.ADD_ITEM,
     payload: {
       id,
+      size,
     },
   }
 }
-export function sumItemAction(id: number, quantity: number) {
+export function sumItemAction(id: number, size: string, quantity: number) {
   return {
     type: ActionTypes.SUM_ITEM,
     payload: {
       id,
+      size,
       quantity,
     },
   }
@@ -39,19 +41,21 @@ export function addNewItemAction(item: Product) {
     },
   }
 }
-export function removeItemAction(id: string) {
+export function removeItemAction(id: number, size: string) {
   return {
     type: ActionTypes.REMOVE_ITEM,
     payload: {
       id,
+      size,
     },
   }
 }
-export function subItemAction(id: string) {
+export function subItemAction(id: number, size: string) {
   return {
     type: ActionTypes.SUB_ITEM,
     payload: {
       id,
+      size,
     },
   }
 }

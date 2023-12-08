@@ -24,9 +24,9 @@ interface ShoppingCartContextType {
   items: Product[]
   total: number
   addNewItem: (item: Product) => void
-  removeItem: (id: string) => void
-  addItem: (id: string) => void
-  subItem: (id: string) => void
+  removeItem: (id: number, size: string) => void
+  addItem: (id: number, size: string) => void
+  subItem: (id: number, size: string) => void
   resetAll: () => void
 }
 
@@ -40,17 +40,17 @@ export function ShoppingCartContextProvider({
   children,
 }: ShoppingCartProviderProps) {
   function getStoredCartItems() {
-    if (typeof window !== 'undefined') {
-      const storedStateAsJSON = localStorage.getItem('@shirt:cart-State-1.0.0')
+    // if (typeof window !== 'undefined') {
+    //   const storedStateAsJSON = localStorage.getItem('@shirt:cart-State-1.0.0')
 
-      if (storedStateAsJSON) {
-        try {
-          return JSON.parse(storedStateAsJSON)
-        } catch (error) {
-          console.error(error)
-        }
-      }
-    }
+    //   if (storedStateAsJSON) {
+    //     try {
+    //       return JSON.parse(storedStateAsJSON)
+    //     } catch (error) {
+    //       console.error(error)
+    //     }
+    //   }
+    // }
     return { items: [] }
   }
 
@@ -65,10 +65,7 @@ export function ShoppingCartContextProvider({
   const { items } = cartState
 
   const total = items.reduce((totalPrice, item) => {
-    return Number.parseFloat(
-      totalPrice +
-        (item.amount * Number(item.price.replace(/[^0-9.-]+/g, ''))) / 100,
-    ).toFixed(2)
+    return totalPrice + item.amount * item.price
   }, 0)
 
   useEffect(() => {
@@ -77,29 +74,31 @@ export function ShoppingCartContextProvider({
   }, [cartState])
 
   function addNewItem(item: Product) {
-    const tryFindItemOnCart = items.find((i: Product) => i.id === item.id)
+    const tryFindItemOnCart = items.find(
+      (i: Product) => i.id === item.id && i.size === item.size,
+    )
 
     if (tryFindItemOnCart) {
-      dispatch(sumItemAction(item.id, item.amount))
+      dispatch(sumItemAction(item.id, item.size, item.amount))
     } else {
       dispatch(addNewItemAction(item))
     }
   }
 
-  function removeItem(id: string) {
-    dispatch(removeItemAction(id))
+  function removeItem(id: number, size: string) {
+    dispatch(removeItemAction(id, size))
   }
 
   function resetAll() {
     dispatch(resetAllAction())
   }
 
-  function addItem(id: string) {
-    dispatch(addItemAction(id))
+  function addItem(id: number, size: string) {
+    dispatch(addItemAction(id, size))
   }
 
-  function subItem(id: string) {
-    dispatch(subItemAction(id))
+  function subItem(id: number, size: string) {
+    dispatch(subItemAction(id, size))
   }
 
   const ShoppingCartContextProps = useMemo(
