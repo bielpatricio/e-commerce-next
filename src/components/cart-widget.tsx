@@ -4,7 +4,9 @@ import { useShoppingCart } from '@/contexts/cart-context'
 import { ShoppingBag, X } from 'lucide-react'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import * as Toast from '@radix-ui/react-toast'
+import * as HoverCard from '@radix-ui/react-hover-card'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export function CartWidget() {
   const { items, total, removeItem } = useShoppingCart()
@@ -20,57 +22,65 @@ export function CartWidget() {
 
   return (
     <Toast.Provider swipeDirection="right">
-      <NavigationMenu.Root className="relative flex justify-center z-10 rounded-lg">
-        <NavigationMenu.List className="flex justify-center p-1 rounded-lg list-none shadow m-0">
-          <NavigationMenu.Item>
-            {/* <NavigationMenu.Trigger className="py-1 px-2 outline-none select-none"> */}
-            <NavigationMenu.Trigger className="flex items-center gap-2">
-              <ShoppingBag className="h-4 w-4" />
-              <span className="text-sm">Cart ({items.length})</span>
-            </NavigationMenu.Trigger>
-            <NavigationMenu.Content className="absolute top-10 right-1 bg-zinc-700 p-4 rounded-lg flex flex-col gap-6 w-auto">
-              {items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between gap-6 m-0 px-2"
+      <HoverCard.Root>
+        <HoverCard.Trigger
+          asChild
+          className="flex justify-center z-10 rounded-lg cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="h-4 w-4" />
+            <span className="text-sm">Cart ({items.length})</span>
+          </div>
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Content
+            sideOffset={5}
+            className="bg-zinc-700 p-4 rounded-lg flex flex-col gap-6 w-auto"
+          >
+            {items.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between gap-6 m-0 px-2"
+              >
+                <Link
+                  key={item.id}
+                  href={`/product/${item.slug}`}
+                  className="text-md text-zinc-300 whitespace-nowrap font-bold flex gap-2"
                 >
-                  <span className="text-md text-zinc-300 whitespace-nowrap font-bold flex gap-2">
-                    <span className="text-md text-violet-400 min-w-[28px]">
-                      {item.amount}x
-                    </span>
-                    {item.title} ({item.size})
+                  <span className="text-md text-violet-400 min-w-[28px]">
+                    {item.amount}x
                   </span>
-                  {/* <span className="text-sm text-center">-</span>
-                  <span className="text-sm text-center">{item.size}</span> */}
-                  <button
-                    className="text-md text-rose-400 hover:underline"
-                    onClick={() =>
-                      removeItemFromCart(item.id, item.size, item.title)
-                    }
-                  >
-                    remover
-                  </button>
-                </div>
-              ))}
-              {items.length > 0 ? (
-                <span className="text-md text-emerald-600 w-full text-end font-semibold border-t-2 border-emerald-600 pt-4 pr-2">
-                  <span className="text-md text-zinc-300 w-full text-end font-semibold">
-                    Total:{' '}
-                  </span>
-                  {total.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
+                  {item.title} ({item.size})
+                </Link>
+                <button
+                  className="text-md text-rose-400 hover:underline"
+                  onClick={() =>
+                    removeItemFromCart(item.id, item.size, item.title)
+                  }
+                >
+                  remover
+                </button>
+              </div>
+            ))}
+            {items.length > 0 ? (
+              <span className="text-md text-emerald-600 w-full text-end font-semibold border-t-2 border-emerald-600 pt-4 pr-2">
+                <span className="text-md text-zinc-300 w-full text-end font-semibold">
+                  Total:{' '}
                 </span>
-              ) : (
-                <span className="text-md text-zinc-300 w-full text-end font-semibold whitespace-nowrap">
-                  Carrinho vazio
-                </span>
-              )}
-            </NavigationMenu.Content>
-          </NavigationMenu.Item>
-        </NavigationMenu.List>
-      </NavigationMenu.Root>
+                {total.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </span>
+            ) : (
+              <span className="text-md text-zinc-300 w-full text-end font-semibold whitespace-nowrap">
+                Carrinho vazio
+              </span>
+            )}
+            <HoverCard.Arrow className="fill-zinc-700" />
+          </HoverCard.Content>
+        </HoverCard.Portal>
+      </HoverCard.Root>
 
       <Toast.Root
         className="rounded-lg p-4 flex gap-4 items-center justify-center bg-rose-400"
