@@ -9,6 +9,7 @@
     "new-cap": "off",
     "no-useless-catch": "off",
     "no-unused-vars": "off",
+    "@typescript-eslint/no-namespace": "off",
     "prettier/prettier": [
       "error",
       {
