@@ -20,7 +20,7 @@ export function Notification() {
           {toastAction.title}
         </Toast.Title>
         <Toast.Action asChild altText="Fechar">
-          <button>
+          <button id="close-notification">
             <X className="h-6 w-6 text-zinc-200" />
           </button>
         </Toast.Action>
