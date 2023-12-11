@@ -1,22 +1,20 @@
 'use client'
 
 import { useShoppingCart } from '@/contexts/cart-context'
-import { ShoppingBag, X } from 'lucide-react'
-import * as NavigationMenu from '@radix-ui/react-navigation-menu'
+import { ShoppingBag } from 'lucide-react'
 import * as Toast from '@radix-ui/react-toast'
 import * as HoverCard from '@radix-ui/react-hover-card'
-import { useState } from 'react'
 import Link from 'next/link'
+import { useNotification } from '@/hooks/useNotification'
+import { Notification } from './notification'
 
 export function CartWidget() {
   const { items, total, removeItem } = useShoppingCart()
-  const [toastAction, setToastAction] = useState({
-    isOpen: false,
-    title: '',
-  })
+
+  const { showToast } = useNotification()
 
   function removeItemFromCart(id: number, size: string, title: string) {
-    setToastAction({ isOpen: true, title })
+    showToast({ title: `${title} removido do carrinho`, type: 'error' })
     removeItem(id, size)
   }
 
@@ -82,26 +80,7 @@ export function CartWidget() {
         </HoverCard.Portal>
       </HoverCard.Root>
 
-      <Toast.Root
-        className="rounded-lg p-4 flex gap-4 items-center justify-center bg-rose-400"
-        open={toastAction.isOpen}
-        onOpenChange={() =>
-          setToastAction({
-            isOpen: false,
-            title: '',
-          })
-        }
-      >
-        <Toast.Title className="text-zinc-200 text-lg">
-          {toastAction.title} removido do carrinho
-        </Toast.Title>
-        <Toast.Action asChild altText="Fechar">
-          <button>
-            <X className="h-6 w-6 text-zinc-200" />
-          </button>
-        </Toast.Action>
-      </Toast.Root>
-      <Toast.Viewport className="absolute bottom-0 right-0 flex flex-col p-4 gap-2 max-w-[100vw] m-0 z-50 outline-none" />
+      <Notification />
     </Toast.Provider>
   )
 }
