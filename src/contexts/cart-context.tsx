@@ -79,9 +79,15 @@ export function ShoppingCartContextProvider({
     )
 
     if (tryFindItemOnCart) {
-      dispatch(sumItemAction(item.id, item.size, item.amount))
+      dispatch(
+        sumItemAction(
+          tryFindItemOnCart.id,
+          tryFindItemOnCart.size,
+          tryFindItemOnCart.amount,
+        ),
+      )
     } else {
-      dispatch(addNewItemAction(item))
+      dispatch(addNewItemAction({ ...item, amount: 1 }))
     }
   }
 
