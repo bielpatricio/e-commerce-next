@@ -73,7 +73,7 @@ export function cartReducer(state: CartState, action: any) {
           ) {
             return {
               ...item,
-              amount: item.amount + action.payload.quantity,
+              amount: item.amount + 1,
             }
           }
           return item
